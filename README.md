@@ -9,7 +9,7 @@
 
 This project aims to monitor the vacuum pressure inside an accelerator waveguide and automatically flag anomalies, such as sudden gas releases or RF discharges. 
 
-The sensor reports one pressure reading every six hours. Buried in these readings are a handful of real events we want to catch, while the "normal" behaviour itself slowly wanders, breathes with a daily thermal cycle, and is heavily rounded off by the analog-to-digital converter (ADC). A fixed threshold on the raw pressure would either miss the small events or drown the system in false alarms. 
+The sensor reports one pressure reading every six hours. Buried in these readings are a handful of real events we want to catch, while the "normal" behavior itself slowly wanders, breathes with a daily thermal cycle, and is heavily rounded off by the analog-to-digital converter (ADC). A fixed threshold on the raw pressure would either miss the small events or drown the system in false alarms. 
 
 ## The Core Challenges
 
@@ -18,7 +18,7 @@ Anomaly detection in this environment is not a standard outlier-detection proble
 *   **The Chicken-and-Egg Problem:** To decide whether a reading is anomalous, we need to know the "normal" baseline dynamics. But to estimate those dynamics cleanly, we need to remove the anomalies first.
 *   **Transient Identifiability:** The physical relaxation coefficient of the vacuum pump (the rate at which the air is pumped out of the system) is almost invisible when the system is at equilibrium. It only becomes mathematically identifiable during the transient recoveries *after* an anomaly.
 *   **Quantized Measurements:** The ADC reports readings with limited significant digits. Pretending these readings are exact might push the model to overestimate noise and discard useful long-time information; the likelihood must acknowledge the bin width of the sensor.
-*   **Drift, jumps and oscillations:** The physical parameters are subject to both fast and slow oscillations, dependent on temperature (which we assume to be unknown), sensor and device degradation, as well as sudden jumps, such as for the manual change of the number of active pumps.
+*   **Drift, Jumps and Oscillations:** The physical parameters are subject to both fast and slow oscillations, dependent on temperature (which we assume to be unknown), sensor and device degradation, as well as sudden jumps, such as for the manual change of the number of active pumps.
 
 
 ## Methodology & Roadmap
@@ -47,7 +47,7 @@ $$
 ### Track B: Engineered Heuristic Baselines
 Advanced statistical models can sometimes be sensitive to mis-specification and unmodeled dynamics in real-world industrial settings. To guarantee reliability, we are simultaneously building rule-based, domain-specific algorithms.
 
-*   **The Approach:** A *divide et impera* split to inductively identify conscutive time intervals with clean exponential decay (no anomalies), finding the anomalies in different stages and looking for regime outliers and jumps. This approach needs hyperparameter tuning, which could be done manually or using Track A.
+*   **The Approach:** A *divide et impera* split to inductively identify consecutive time intervals with clean exponential decay (no anomalies), finding the anomalies in different stages and looking for regime outliers and jumps. This approach needs hyperparameter tuning, which could be done manually or using Track A.
 *   **Why it matters:** It establishes a robust, high-recall baseline that is computationally cheap, inherently stable, easy to debug in a production environment, and highly interpretable.
 
 ## Future API Structure
